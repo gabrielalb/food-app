@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  <base href="/client/dist/index.html"></base>
+  <link rel="stylesheet" type="text/css" href="<%= grunt.config.get('pkg.name') %>.css"/>
+  <script type="text/javascript" src="jquery.js"></script>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+  <script type="text/javascript" src="angular.js"></script>
+  <script type="text/javascript" src="bootstrap.js"></script>
+  <script type="text/javascript" src="select2.js"></script>
+
+  <script type="text/javascript" src="<%= grunt.config.get('pkg.name') %>.js"></script>
+</head>
+
+<body ng-controller="AppCtrl">
+  <div ng-include="'header.tpl.html'"></div>
+  <div ng-include="'notifications.tpl.html'" class="container-fluid" ng-show="notifications.getCurrent().length"></div>
+  <div ng-view class="container-fluid"></div>
+</body>
+
+<script type="text/javascript">
+  function appCallback(){
+  	angular.bootstrap($("html"), ["app"]);
+  }
+</script>
+
+ <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=appCallback"></script>
+
+</html>
