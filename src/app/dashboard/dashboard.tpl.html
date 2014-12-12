@@ -13,22 +13,23 @@
         <div class="row" ng-show="currentSheet.id !== null && !loadingSheet">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <input type="text" style="width:250px" class="form-control" autocomplete="off" placeholder="Enter some text..." ng-model="selectedPerson" typeahead="item as item.title for item in people | filter:$viewValue | limitTo:8" />
+                    <input type="text" style="width:250px" class="form-control" autocomplete="off" placeholder="Search your name..." ng-model="selectedPerson" typeahead="item as item.title for item in people | filter:$viewValue | limitTo:8" />
                 </div>
             </div>
         </div>
         <br/>
         <div class="row" ng-show="selectedPerson.row">
             <div class="col-lg-12">
-                <div class="panel panel-default" ng-repeat="food in selectedFood track by $index" ng-click="setFocusDay($index)">
+                <div class="panel panel-default" ng-repeat="food in selectedFood | orderBy:'col' track by $index">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> {{food.day}}</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" ng-click="setFocusDay($index)">
                         {{food.title}}
                     </div>
                     <div ng-show="focusDay == $index">
-                        <input type="hidden" id="select" select-food day-id="{{$index}}" />
+                        <input type="hidden" id="select" value="-1" select-food day-id="{{$index}}" />
+                        <button class="btn btn-default btn-xs" ng-click="submitSelection($index)"><i class="fa fa-floppy-o"></i> OK</button>
                     </div>
                 </div>
             </div>

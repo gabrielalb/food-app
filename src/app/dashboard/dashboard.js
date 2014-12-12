@@ -42,8 +42,28 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
             placeholder: "Select...", 
             data: scope.ctrlData,
             multiple: true,
-            width: '95%'
-          });          
+            width: '95%',
+            initSelection: function(element, callback) {
+              var preselection = [];
+              var selection = null;
+
+              for (var k = 0; k < scope.$parent.selectedFood.length; k++) {
+                if ((parseInt(scope.$parent.selectedFood[k].col, 10) - 2) === parseInt(scope.dayId, 10)) {
+                  selection = scope.$parent.selectedFood[k];
+                  break;
+                }
+              }
+
+              for (var i = 0; i < scope.ctrlData.length; i++) {
+                for (var j = 0; j < scope.ctrlData[i].children.length; j++) {
+                  if ((selection.title.toUpperCase()).indexOf(scope.ctrlData[i].children[j].text.toUpperCase()) >= 0) {
+                    preselection.push(scope.ctrlData[i].children[j]);
+                  }
+                }
+              }
+              callback(preselection);
+            }
+          });
         }
     };
 })
@@ -89,18 +109,20 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
       });  
     }
   });
-
+    
   $scope.$watch('selectedPerson', function() {
     if ($.isPlainObject($scope.selectedPerson)) {
       // selection
+      var tmpObj = {};
+      var day = "";
       $scope.selectedFood = [];
       for (var i in $scope.allData.feed.entry) {
           if ($scope.allData.feed.entry[i].gs$cell.row === $scope.selectedPerson.row && parseInt($scope.allData.feed.entry[i].gs$cell.col, 10) > 1 && parseInt($scope.allData.feed.entry[i].gs$cell.col, 10) < 7) {
-            var tmpObj = {};
+            tmpObj = {};
             tmpObj["row"] = $scope.allData.feed.entry[i].gs$cell.row;
             tmpObj["col"] = $scope.allData.feed.entry[i].gs$cell.col;
 
-            var day = "";
+            day = "";
             switch ($scope.allData.feed.entry[i].gs$cell.col) {
               case '2':
                 day = "Luni";
@@ -123,7 +145,49 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
             tmpObj["title"] = $.trim($scope.allData.feed.entry[i].content.$t);
             $scope.selectedFood.push(tmpObj);
           }
+      }
+
+      var found = false;
+      // add the empty days since they don't exist in the feed
+      for (var j = 2; j <= 6; j++) {
+        found = false;
+        for (var k = 0; k < $scope.selectedFood.length; k++) {  
+          if (parseInt($scope.selectedFood[k].col, 10) === j) {
+            found = true;
+            break;
+          }
         }
+
+        if (! found) {
+          tmpObj = {};
+          tmpObj["row"] = $scope.selectedPerson.row;
+          tmpObj["col"] = j.toString();
+
+          day = "";
+          switch (j.toString()) {
+            case '2':
+              day = "Luni";
+              break;
+            case '3':
+              day = "Marti";
+              break;
+            case '4':
+              day = "Miercuri";
+              break;
+            case '5':
+              day = "Joi";
+              break;
+            case '6':
+              day = "Vineri";
+              break;
+          }
+
+          tmpObj["day"] = day;
+          tmpObj["title"] = "-";
+
+          $scope.selectedFood.push(tmpObj);
+        }
+      }
     }
   });
   
@@ -131,7 +195,8 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     $scope.focusDay = focusDay;
   };
 
-  $scope.manageSprints = function (projectId) {
-    $location.path('/projects/' + projectId + '/sprints');
+  $scope.submitSelection = function (idx) {
+    $scope.focusDay = null;
   };
+
 }]);
