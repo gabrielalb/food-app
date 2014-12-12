@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint','build','karma:unit']);
-  grunt.registerTask('build', ['clean','html2js','concat','less:build','copy:assets']);
+  grunt.registerTask('build', ['clean','html2js','less:build','concat','copy:assets']);
   grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'less:min','copy:assets']);
   grunt.registerTask('test-watch', ['karma:watch']);
 
@@ -47,7 +47,7 @@ module.exports = function (grunt) {
         common: ['src/common/**/*.tpl.html']
       },
       less: ['src/less/stylesheet.less'], // recess:build doesn't accept ** in its file patterns
-      css: ['vendor/**/*.css'],
+      css: ['src/css/custom.css'],
       lessWatch: ['src/less/**/*.less']
     },
     clean: ['<%= distdir %>/*'],
@@ -92,6 +92,10 @@ module.exports = function (grunt) {
         options: {
           process: true
         }
+      },
+      css: {
+        src:['<%= distdir %>/<%= pkg.name %>.css', 'vendor/**/*.css', '<%= src.css %>'],
+        dest: '<%= distdir %>/<%= pkg.name %>.css'
       },
       angular: {
         src:['vendor/angular/angular.js', 'vendor/angular/angular-route.js'],
@@ -138,7 +142,7 @@ module.exports = function (grunt) {
     less: {
       build: {
         files: {
-          '<%= distdir %>/<%= pkg.name %>.css': ['<%= src.less %>', '<%= src.css %>']
+          '<%= distdir %>/<%= pkg.name %>.css': ['<%= src.less %>']
         },
         options: {
           compile: true
@@ -146,7 +150,7 @@ module.exports = function (grunt) {
       },
       min: {
         files: {
-          '<%= distdir %>/<%= pkg.name %>.css': ['<%= src.less %>', '<%= src.css %>']
+          '<%= distdir %>/<%= pkg.name %>.css': ['<%= src.less %>']
         },
         options: {
           compress: true

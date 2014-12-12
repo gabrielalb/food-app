@@ -20,46 +20,22 @@
         <br/>
         <div class="row" ng-show="selectedPerson.row">
             <div class="col-lg-12">
-                <div class="panel panel-default">
+                <div class="panel panel-default" ng-repeat="food in selectedFood track by $index" ng-click="setFocusDay($index)">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> Luni</h3>
+                        <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> {{food.day}}</h3>
                     </div>
                     <div class="panel-body">
-                        Ciorba radauteana, Snitel de pui cu legume mexicane, Salata de castraveti murati
+                        {{food.title}}
+                    </div>
+                    <div ng-show="focusDay == $index">
+                        <input type="hidden" id="select" select-food day-id="{{$index}}" />
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> Marti</h3>
-                    </div>
-                    <div class="panel-body">
-                        Ciorba radauteana, Snitel de pui cu legume mexicane, Salata de castraveti murati
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> Miercuri</h3>
-                    </div>
-                    <div class="panel-body">
-                        Ciorba radauteana, Snitel de pui cu legume mexicane, Salata de castraveti murati
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> Joi</h3>
-                    </div>
-                    <div class="panel-body">
-                        Ciorba radauteana, Snitel de pui cu legume mexicane, Salata de castraveti murati
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-calendar fa-custom"></i> Vineri</h3>
-                    </div>
-                    <div class="panel-body">
-                        Ciorba radauteana, Snitel de pui cu legume mexicane, Salata de castraveti murati
-                    </div>
-                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="loadingSheet">
+            <div class="span2">
+                <div class='throbber'></div>
             </div>
         </div>
     </div>
@@ -83,8 +59,6 @@
         <input type="text" autocomplete="off" placeholder="Enter some text..." ng-model="selectedPerson" typeahead="item as item.title for item in people | filter:$viewValue | limitTo:8">
     </div>
 </div>
--->
-
 
 <table class="table table-bordered table-condensed table-striped table-hover" ng-show="selectedPerson.row">
     <thead>
@@ -110,8 +84,5 @@
     </tbody>
 </table>
 
-<div class="row" ng-show="loadingSheet">
-    <div class="span2">
-        <div class='throbber'></div>
-    </div>
-</div>
+
+-->

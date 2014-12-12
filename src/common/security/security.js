@@ -60,8 +60,10 @@ angular.module('security.service', [
         if (authResult && !authResult.error) {
           service.currentUser = authResult;
         }
-        else
+        else {
           service.currentUser = null;
+        }
+          
     },
 
     // Attempt to authenticate a user by the given email and password
@@ -73,8 +75,10 @@ angular.module('security.service', [
               if (authResult && !authResult.error) {
                 service.currentUser = authResult;
               }
-              else
+              else {
                 service.currentUser = null;
+              }
+              
               p.resolve(gapi);
             });
 
@@ -115,9 +119,11 @@ angular.module('security.service', [
             if (authResult && !authResult.error) {
               service.currentUser = authResult;
             }
-            else
+            else {
               service.currentUser = null;
-             p.resolve(authResult);
+            }
+            
+            p.resolve(authResult);
           });
 
           return p.promise;
