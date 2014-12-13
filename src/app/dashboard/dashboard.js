@@ -5,8 +5,8 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     templateUrl:'dashboard/dashboard.tpl.html',
     controller:'DashboardCtrl',
     resolve:{
-      //authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser,
-      authenticatedUser: ['security', function(security) {
+      authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser,
+      authenticatedUserName: ['security', function(security) {
         return security.requestCurrentUser().then(function(userInfo) {
           return security.requestUserName();
         });
@@ -82,11 +82,11 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     };
 })
 
-.controller('DashboardCtrl', ['$scope', '$log', '$filter', '$location', 'DOC_ID', 'authenticatedUser', 'worksheets', 'Sheets', function ($scope, $log, $filter, $location, docID, authenticatedUser, worksheets, sheetsService) {
+.controller('DashboardCtrl', ['$scope', '$log', '$filter', '$location', 'DOC_ID', 'authenticatedUser', 'authenticatedUserName', 'worksheets', 'Sheets', function ($scope, $log, $filter, $location, docID, authenticatedUser, authenticatedUserName, worksheets, sheetsService) {
   $scope.sheets = null;
 
   // broadcast that we have the user name
-  $scope.$emit('get-user-name', authenticatedUser);
+  $scope.$emit('get-user-name', authenticatedUserName);
   
   $scope.loadingSheet = false;
   $scope.worksheets = [ { id : null, title: '-- Select --' } ];
