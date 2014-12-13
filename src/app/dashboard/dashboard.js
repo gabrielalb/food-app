@@ -5,7 +5,12 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     templateUrl:'dashboard/dashboard.tpl.html',
     controller:'DashboardCtrl',
     resolve:{
-      authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser,
+      //authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser,
+      authenticatedUser: ['security', function(security) {
+        return security.requestCurrentUser().then(function(userInfo) {
+          return security.requestUserName();
+        });
+      }],
       worksheets:['Sheets', 'security', 'DOC_ID', function (Sheets, security, docID) {
           return security.requestCurrentUser().then(function(userInfo) {
               return Sheets.getSheets(docID, userInfo.access_token);
@@ -35,32 +40,41 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
               $scope.ctrlData[2].children.push({ id: "fel3", text: $.trim($scope.$parent.allData.feed.entry[i].content.$t) });
             }
           }
+
+          $scope.handleSelection = function(idx) {
+            var preselection = [];
+            var selection = null;
+
+            for (var k = 0; k < $scope.$parent.selectedFood.length; k++) {
+              if ((parseInt($scope.$parent.selectedFood[k].col, 10) - 2) === parseInt(idx, 10)) {
+                selection = $scope.$parent.selectedFood[k];
+                break;
+              }
+            }
+
+            for (var i = 0; i < $scope.ctrlData.length; i++) {
+              for (var j = 0; j < $scope.ctrlData[i].children.length; j++) {
+                if ((selection.title.toUpperCase()).indexOf($scope.ctrlData[i].children[j].text.toUpperCase()) >= 0) {
+                  preselection.push($scope.ctrlData[i].children[j]);
+                }
+              }
+            }
+
+            return preselection;
+          };
         },
 
         link: function (scope, element, attrs, ngModelCtrl) {
+          element.attr("id", "select_" + scope.dayId);
           element.select2({
             placeholder: "Select...", 
             data: scope.ctrlData,
             multiple: true,
             width: '95%',
             initSelection: function(element, callback) {
-              var preselection = [];
-              var selection = null;
-
-              for (var k = 0; k < scope.$parent.selectedFood.length; k++) {
-                if ((parseInt(scope.$parent.selectedFood[k].col, 10) - 2) === parseInt(scope.dayId, 10)) {
-                  selection = scope.$parent.selectedFood[k];
-                  break;
-                }
-              }
-
-              for (var i = 0; i < scope.ctrlData.length; i++) {
-                for (var j = 0; j < scope.ctrlData[i].children.length; j++) {
-                  if ((selection.title.toUpperCase()).indexOf(scope.ctrlData[i].children[j].text.toUpperCase()) >= 0) {
-                    preselection.push(scope.ctrlData[i].children[j]);
-                  }
-                }
-              }
+              $(element).val("");
+              
+              var preselection = scope.handleSelection(scope.dayId);
               callback(preselection);
             }
           });
@@ -68,8 +82,12 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     };
 })
 
-.controller('DashboardCtrl', ['$scope', '$log', '$location', 'DOC_ID', 'authenticatedUser', 'worksheets', 'Sheets', function ($scope, $log, $location, docID, authenticatedUser, worksheets, sheetsService) {
+.controller('DashboardCtrl', ['$scope', '$log', '$filter', '$location', 'DOC_ID', 'authenticatedUser', 'worksheets', 'Sheets', function ($scope, $log, $filter, $location, docID, authenticatedUser, worksheets, sheetsService) {
   $scope.sheets = null;
+
+  // broadcast that we have the user name
+  $scope.$emit('get-user-name', authenticatedUser);
+  
   $scope.loadingSheet = false;
   $scope.worksheets = [ { id : null, title: '-- Select --' } ];
   $scope.currentSheet = $scope.worksheets[0];
@@ -111,11 +129,14 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
   });
     
   $scope.$watch('selectedPerson', function() {
+    var tmpObj = {};
+    var day = "";
+      
+    $scope.selectedFood = [];
+    $scope.focusDay = null;
+
     if ($.isPlainObject($scope.selectedPerson)) {
       // selection
-      var tmpObj = {};
-      var day = "";
-      $scope.selectedFood = [];
       for (var i in $scope.allData.feed.entry) {
           if ($scope.allData.feed.entry[i].gs$cell.row === $scope.selectedPerson.row && parseInt($scope.allData.feed.entry[i].gs$cell.col, 10) > 1 && parseInt($scope.allData.feed.entry[i].gs$cell.col, 10) < 7) {
             tmpObj = {};
@@ -197,6 +218,24 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
 
   $scope.submitSelection = function (idx) {
     $scope.focusDay = null;
+    var selectedData = $("input#select_" + idx).select2('data');
+    selectedData = $filter('orderBy')(selectedData, 'id');
+    var selection = null;
+
+    var selectionText = "";
+
+    for (var i = 0; i < selectedData.length; i++) {
+      selectionText += selectedData[i].text + "; ";
+    }
+
+    selectionText = (selectionText.length === 0) ? "-" : selectionText;
+
+    for (var k = 0; k < $scope.selectedFood.length; k++) {
+      if ((parseInt($scope.selectedFood[k].col, 10) - 2) === parseInt(idx, 10)) {
+        $scope.selectedFood[k].title = selectionText;
+        break;
+      }
+    }
   };
 
 }]);

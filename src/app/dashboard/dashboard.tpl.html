@@ -28,7 +28,7 @@
                         {{food.title}}
                     </div>
                     <div ng-show="focusDay == $index">
-                        <input type="hidden" id="select" value="-1" select-food day-id="{{$index}}" />
+                        <input type="hidden" value="-1" select-food day-id="{{$index}}" />
                         <button class="btn btn-default btn-xs" ng-click="submitSelection($index)"><i class="fa fa-floppy-o"></i> OK</button>
                     </div>
                 </div>
@@ -41,49 +41,3 @@
         </div>
     </div>
 </div>
-
-<!--
-<div class="row">
-    <div class="span2">
-        Select week:
-    </div>
-    <div class="span5">
-        <select ng-model="currentSheet" ng-options="w.title for w in worksheets"></select>
-    </div>
-</div>
-
-<div class="row" ng-show="currentSheet.id !== null && !loadingSheet">
-    <div class="span2">
-        Find yourself:
-    </div>
-    <div class="span5">
-        <input type="text" autocomplete="off" placeholder="Enter some text..." ng-model="selectedPerson" typeahead="item as item.title for item in people | filter:$viewValue | limitTo:8">
-    </div>
-</div>
-
-<table class="table table-bordered table-condensed table-striped table-hover" ng-show="selectedPerson.row">
-    <thead>
-    <tr>
-        <th class="span2">Luni</th>
-        <th class="span2">Marti</th>
-        <th class="span2">Miercuri</th>
-        <th class="span2">Joi</th>
-        <th class="span2">Vineri</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td ng-repeat="food in selectedFood track by $index" ng-click="setFocusDay($index)">
-                <div>
-                    <div>{{food.title}}</div>
-                    <div ng-show="focusDay == $index">
-                        <input type="hidden" id="select" select-food day-id="{{$index}}" />
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-
--->

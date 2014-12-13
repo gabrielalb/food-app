@@ -78,7 +78,7 @@ angular.module('security.service', [
               else {
                 service.currentUser = null;
               }
-              
+             // gapi.client.load('plus','v1');
               p.resolve(gapi);
             });
 
@@ -128,6 +128,20 @@ angular.module('security.service', [
 
           return p.promise;
       }
+    },
+
+    requestUserName: function() {
+      var p = $q.defer();
+      gapi.client.load('plus','v1', function() {
+        var request = gapi.client.plus.people.get({
+          'userId': 'me'
+        });
+        request.execute(function(resp) {
+          p.resolve(resp.displayName);
+        });
+      });
+
+      return p.promise;
     },
 
     // Information about the current user

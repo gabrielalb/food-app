@@ -30,7 +30,7 @@ angular.module('app').constant('I18N.MESSAGES', {
 });
 
 angular.module('app').constant('CLIENT_ID', '726741027629-tdb6siouc4sm3aomg98vcdrs3oaaenr9.apps.googleusercontent.com');
-angular.module('app').constant('SCOPES', 'https://www.googleapis.com/auth/drive https://spreadsheets.google.com/feeds');
+angular.module('app').constant('SCOPES', 'https://www.googleapis.com/auth/drive https://spreadsheets.google.com/feeds https://www.googleapis.com/auth/plus.me');
 angular.module('app').constant('DOC_ID', '0AtX_izg7DKxdcHFhYmJQVU9iM3FMOGxtaWJLTEtrVUE');
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -49,6 +49,11 @@ angular.module('app').run(['security', function(security) {
 angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications, localizedMessages) {
 
   $scope.notifications = i18nNotifications;
+  $scope.userName = "";
+
+  $scope.$on('get-user-name', function (event, data) {
+    $scope.userName = data;
+  });
 
   $scope.removeNotification = function (notification) {
     i18nNotifications.remove(notification);
