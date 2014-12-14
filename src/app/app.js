@@ -1,15 +1,11 @@
 angular.module('app', [
   'ngRoute',
   'login',
- // 'projectsinfo',
   'dashboard',
-//  'projects',
-//  'admin',
   'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'security',
-  'directives.crud',
   'templates.app',
   'templates.common']);
 
