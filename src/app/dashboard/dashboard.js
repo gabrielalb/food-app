@@ -82,7 +82,7 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     };
 })
 
-.controller('DashboardCtrl', ['$scope', '$log', '$filter', '$location', 'DOC_ID', 'authenticatedUser', 'authenticatedUserName', 'worksheets', 'Sheets', function ($scope, $log, $filter, $location, docID, authenticatedUser, authenticatedUserName, worksheets, sheetsService) {
+.controller('DashboardCtrl', ['$scope', 'notifications', '$log', '$filter', '$location', 'DOC_ID', 'authenticatedUser', 'authenticatedUserName', 'worksheets', 'Sheets', function ($scope, notifications, $log, $filter, $location, docID, authenticatedUser, authenticatedUserName, worksheets, sheetsService) {
   $scope.sheets = null;
 
   // broadcast that we have the user name
@@ -251,7 +251,8 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     cellText.push(newArr);
     
     sheetsService.saveSheetData(docID, authenticatedUser.access_token, $scope.currentSheet.id, cellRow, cellCol, cellText).then(function(data) {
-      console.log(data);
+      notifications.removeAll();
+      notifications.pushForCurrentRoute(data);
     });
   };
 
