@@ -18,8 +18,10 @@
                 <span ng-show="hasPendingRequests()">
                     <a href="#"><img src="img/spinner.gif"></a>
                 </span>
-                <button class="btn btn-primary" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Logout</button>
-                <div class="well well-sm"> Welcome, <strong>{{userName}}</strong></div>
+                <div ng-show="userName !== ''">
+                    <button class="btn btn-primary" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ng-click="logout()">Logout</button>
+                    <div class="well well-sm"> Welcome, <strong>{{userName}}</strong></div>
+                </div>
             </div>
       </form>
     </div><!-- /.navbar-collapse -->

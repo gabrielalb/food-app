@@ -70,7 +70,7 @@ angular.module('security.service', [
     login: function() {
       var p = $q.defer();
       gapi.auth.authorize(
-            {'client_id': $client_id, 'scope': $scopes, 'immediate': false},
+            {'client_id': $client_id, 'scope': $scopes, 'immediate': false, 'cookie_policy': 'single_host_origin'},
             function(authResult) {
               if (authResult && !authResult.error) {
                 service.currentUser = authResult;
@@ -100,10 +100,9 @@ angular.module('security.service', [
 
     // Logout the current user and redirect
     logout: function(redirectTo) {
-      $http.post('/logout').then(function() {
         service.currentUser = null;
+        gapi.auth.signOut();
         redirect(redirectTo);
-      });
     },
 
     // Ask the backend to see if a user is already authenticated - this may be from a previous session.
@@ -114,7 +113,7 @@ angular.module('security.service', [
       else {
           var p = $q.defer();
           gapi.auth.authorize(
-            {'client_id': $client_id, 'scope': $scopes, 'immediate': true},
+            {'client_id': $client_id, 'scope': $scopes, 'immediate': true, 'cookie_policy': 'single_host_origin'},
            function(authResult){
             if (authResult && !authResult.error) {
               service.currentUser = authResult;

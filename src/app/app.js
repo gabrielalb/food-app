@@ -73,12 +73,17 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
   $scope.isAuthenticated = security.isAuthenticated;
   $scope.isAdmin = security.isAdmin;
 
-  $scope.home = function () {
+  /*$scope.home = function () {
     if (security.isAuthenticated()) {
       $location.path('/dashboard');
     } else {
       $location.path('/login');
     }
+  };*/
+
+  $scope.logout = function() {
+    security.logout('/login');
+    $scope.$emit('get-user-name', "");
   };
 
   $scope.isNavbarActive = function (navBarPath) {
