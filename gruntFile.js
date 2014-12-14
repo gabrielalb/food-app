@@ -115,13 +115,14 @@ module.exports = function (grunt) {
       }
     },
     uglify: {
-      dist:{
+      // TODO: fix dependency injections annotations before running uglify (grunt-ng-annotate)
+      /*dist:{
         options: {
           banner: "<%= banner %>"
         },
         src:['<%= src.js %>' ,'<%= src.jsTpl %>'],
         dest:'<%= distdir %>/<%= pkg.name %>.js'
-      },
+      },*/
       angular: {
         src:['<%= concat.angular.src %>'],
         dest: '<%= distdir %>/angular.js'
