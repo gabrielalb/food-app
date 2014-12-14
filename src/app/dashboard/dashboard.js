@@ -250,7 +250,7 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
 
     cellText.push(newArr);
     
-    sheetsService.saveSheetData(docID, authenticatedUser.access_token, /*$scope.currentSheet.id*/ 'odb', cellRow, cellCol, cellText).then(function(data) {
+    sheetsService.saveSheetData(docID, authenticatedUser.access_token, $scope.currentSheet.id, cellRow, cellCol, cellText).then(function(data) {
       console.log(data);
     });
   };
