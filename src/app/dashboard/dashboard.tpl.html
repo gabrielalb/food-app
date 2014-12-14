@@ -35,8 +35,13 @@
             </div>
         </div>
         <div class="row" ng-show="loadingSheet">
-            <div class="span2">
+            <div class="col-lg-2">
                 <div class='throbber'></div>
+            </div>
+        </div>
+        <div class="row" ng-show="selectedPerson.row">
+            <div class="col-lg-2">
+                <button class="btn btn-default" ng-click="publishSelection()"><i class="fa fa-floppy-o"></i> Publish</button>
             </div>
         </div>
     </div>

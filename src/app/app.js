@@ -32,6 +32,7 @@ angular.module('app').constant('I18N.MESSAGES', {
 angular.module('app').constant('CLIENT_ID', '726741027629-tdb6siouc4sm3aomg98vcdrs3oaaenr9.apps.googleusercontent.com');
 angular.module('app').constant('SCOPES', 'https://www.googleapis.com/auth/drive https://spreadsheets.google.com/feeds https://www.googleapis.com/auth/plus.me');
 angular.module('app').constant('DOC_ID', '0AtX_izg7DKxdcHFhYmJQVU9iM3FMOGxtaWJLTEtrVUE');
+angular.module('app').constant('API_URL', 'http://localhost:8080/foodapi/');
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);

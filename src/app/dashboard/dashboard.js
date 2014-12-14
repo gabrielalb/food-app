@@ -238,4 +238,21 @@ angular.module('dashboard', ['security.authorization', 'security.service', 'reso
     }
   };
 
+  $scope.publishSelection = function() {
+    var cellRow = parseInt($scope.selectedPerson.row, 10);
+    var cellCol = 2;
+    var cellText = [];
+    var newArr = [];
+    
+    for (var i in $scope.selectedFood) {
+      newArr.push($scope.selectedFood[i].title);
+    }
+
+    cellText.push(newArr);
+    
+    sheetsService.saveSheetData(docID, authenticatedUser.access_token, /*$scope.currentSheet.id*/ 'odb', cellRow, cellCol, cellText).then(function(data) {
+      console.log(data);
+    });
+  };
+
 }]);
