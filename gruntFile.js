@@ -7,25 +7,17 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-html2js');
 
   // Default task.
-  grunt.registerTask('default', ['jshint','build','karma:unit']);
+  grunt.registerTask('default', ['jshint','build']);
   grunt.registerTask('build', ['clean','html2js','less:build','concat','copy:assets']);
-  grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'less:min','copy:assets']);
-  grunt.registerTask('test-watch', ['karma:watch']);
+  grunt.registerTask('release', ['clean','html2js','uglify','jshint','concat:index', 'less:min','copy:assets']);
 
   // Print a timestamp (useful for when watching)
   grunt.registerTask('timestamp', function() {
     grunt.log.subhead(Date());
   });
-
-  var karmaConfig = function(configFile, customOptions) {
-    var options = { configFile: configFile, keepalive: true };
-    var travisOptions = process.env.TRAVIS && { browsers: ['Firefox'], reporters: 'dots' };
-    return grunt.util._.extend(options, customOptions, travisOptions);
-  };
 
   // Project configuration.
   grunt.initConfig({
@@ -55,10 +47,6 @@ module.exports = function (grunt) {
       assets: {
         files: [{ dest: '<%= distdir %>', src : '**', expand: true, cwd: 'src/assets/' }]
       }
-    },
-    karma: {
-      unit: { options: karmaConfig('test/config/unit.js') },
-      watch: { options: karmaConfig('test/config/unit.js', { singleRun:false, autoWatch: true}) }
     },
     html2js: {
       app: {
